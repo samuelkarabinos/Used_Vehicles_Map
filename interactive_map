@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Autá na mape</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #111; }
+  #map { height: 100%; width: 100%; }
+
+  .car-icon {
+    background: #e2231a;
+    width: 34px;
+    height: 34px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    border: 3px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .car-icon span {
+    transform: rotate(45deg);
+    font-size: 16px;
+  }
+
+  .leaflet-popup-content-wrapper {
+    border-radius: 14px;
+    padding: 0;
+    overflow: hidden;
+  }
+  .leaflet-popup-content {
+    margin: 0;
+    width: 260px !important;
+  }
+  .popup-card { font-size: 14px; }
+  .popup-photo {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    display: block;
+    background: #222;
+  }
+  .popup-body { padding: 12px 14px 14px 14px; }
+  .popup-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 2px;
+    text-decoration: none;
+    display: inline-block;
+  }
+  a.popup-title {
+    color: #c0201a;
+  }
+  a.popup-title:active {
+    opacity: 0.7;
+  }
+  .popup-sub {
+    font-size: 12.5px;
+    color: #555;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+  .popup-price {
+    font-size: 17px;
+    font-weight: 700;
+    color: #c0201a;
+    margin-bottom: 10px;
+  }
+  .popup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 10px;
+    margin-bottom: 10px;
+  }
+  .popup-item { line-height: 1.25; }
+  .popup-label {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #888;
+    display: block;
+  }
+  .popup-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: #222;
+  }
+  .popup-contact {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #eee;
+    padding-top: 8px;
+    margin-top: 4px;
+  }
+  .popup-contact-label {
+    font-size: 12px;
+    color: #555;
+    text-decoration: none;
+  }
+  a.popup-contact-label {
+    color: #1a6ee2;
+    font-weight: 600;
+  }
+  a.popup-contact-label:active {
+    opacity: 0.7;
+  }
+  .popup-contact-value {
+    font-size: 13px;
+    font-weight: 700;
+    color: #111;
+    background: #f1f1f1;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+  const cars = [
+    {
+      title: "Volvo V60",
+      url: "https://www.mobile.de/cz/vozidel/podrobnosti.html?id=461867278",
+      subtitle: "B4 R-Design MY21 | HUD | 360° | Pano | HK",
+      price: "22 250 €",
+      lat: 47.6725,
+      lng: 9.3348,
+      location: "DE-88090 Immenstaad",
+      age: "12/2020",
+      engine: "B4, benzín, 145 kW (197 k), automat",
+      mileage: "118 500 km",
+      contact: "formulár",
+      photo: ""
+    },
+    {
+      title: "Volvo V60",
+      url: "https://www.mobile.de/cz/vozidel/podrobnosti.html?id=41316233120640",
+      subtitle: "Kombi Momentum Pro",
+      price: "23 950 €",
+      lat: 49.0134,
+      lng: 12.1016,
+      location: "Zimmerstr. 28, DE-93059 Regensburg",
+      age: "12/2021",
+      engine: "Benzín, 145 kW (197 k), automat",
+      mileage: "79 950 km",
+      contact: "+49 941 2030483877",
+      photo: ""
+    },
+    {
+      title: "Volvo V60",
+      url: "https://www.mobile.de/cz/vozidel/podrobnosti.html?id=446283316",
+      subtitle: "Kombi Inscription",
+      price: "23 490 €",
+      lat: 50.8244,
+      lng: 8.5279,
+      location: "Gasserstraße 24, DE-35232 Dautphetal",
+      age: "09/2020",
+      engine: "Benzín, 140 kW (190 k), automat",
+      mileage: "82 994 km",
+      contact: "+49 6468 216987348",
+      photo: ""
+    }
+  ];
+
+  const map = L.map('map', { zoomControl: true });
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap prispievatelia'
+  }).addTo(map);
+
+  const carDivIcon = L.divIcon({
+    className: '',
+    html: '<div class="car-icon"><span>🚗</span></div>',
+    iconSize: [34, 34],
+    iconAnchor: [17, 34],
+    popupAnchor: [0, -32]
+  });
+
+  cars.forEach(car => {
+    const photoHtml = car.photo
+      ? `<img class="popup-photo" src="${car.photo}" alt="${car.title}">`
+      : '';
+
+    const popupHtml = `
+      <div class="popup-card">
+        ${photoHtml}
+        <div class="popup-body">
+          <a class="popup-title" href="${car.url}" target="_blank" rel="noopener">${car.title} ↗</a>
+          <div class="popup-sub">${car.subtitle}</div>
+          <div class="popup-price">${car.price}</div>
+          <div class="popup-grid">
+            <div class="popup-item">
+              <span class="popup-label">Vek</span>
+              <span class="popup-value">${car.age}</span>
+            </div>
+            <div class="popup-item">
+              <span class="popup-label">Km</span>
+              <span class="popup-value">${car.mileage}</span>
+            </div>
+            <div class="popup-item" style="grid-column: 1 / -1;">
+              <span class="popup-label">Motorizácia</span>
+              <span class="popup-value">${car.engine}</span>
+            </div>
+          </div>
+          <div class="popup-contact">
+            <a class="popup-contact-label" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(car.location)}" target="_blank" rel="noopener">${car.location} ↗</a>
+            <span class="popup-contact-value">${car.contact}</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    L.marker([car.lat, car.lng], { icon: carDivIcon })
+      .addTo(map)
+      .bindPopup(popupHtml, { maxWidth: 280, minWidth: 260 });
+  });
+
+  if (cars.length > 1) {
+    const bounds = L.latLngBounds(cars.map(c => [c.lat, c.lng]));
+    map.fitBounds(bounds, { padding: [40, 40] });
+  } else {
+    map.setView([cars[0].lat, cars[0].lng], 11);
+  }
+</script>
+
+</body>
+</html>
