@@ -1,6 +1,20 @@
-# Main page for Samuel Karabinos
+# Used Vehicles Map
 
+An interactive map application for exploring cars listed in bazaars.
 
-### Interactive map for Cars
+## Features
 
-- https://samuelkarabinos.github.io/Used_Vehicles_Map/interactive_map.html
+- **Interactive Map**: Browse and explore used vehicles by location
+- **Bazaar Listings**: View cars from various bazaar listings
+
+## Access the Application
+
+Click the link below to view the interactive map:
+
+[![Interactive Vehicles Map](https://img.shields.io/badge/Open-Interactive%20Map-blue?style=for-the-badge)](https://samuelkarabinos.github.io/Used_Vehicles_Map/interactive_map.html)
+
+Or visit directly: https://samuelkarabinos.github.io/Used_Vehicles_Map/interactive_map.html
+
+---
+
+**Author**: Samuel Karabinos
