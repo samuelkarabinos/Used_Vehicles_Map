@@ -168,6 +168,20 @@
       mileage: "82 994 km",
       contact: "+49 6468 216987348",
       photo: ""
+    },
+    {
+      title: "Volvo V60",
+      url: "https://selekt.volvocars.cz/cs-CZ/store/all/vehicles/1YWM3ZmVkZWEtYmQzYy00ZjZmLTljN2UtNjYwODlmMjhkODNhfENvZGV3ZWF2ZXJzU3RvY2tJZHxDYXI1",
+      subtitle: "B4 CORE AUT CZ",
+      price: "579 000 Kč",
+      lat: 50.0089,
+      lng: 14.5561,
+      location: "K Chotobuzi 333, Čestlice, Střední Čechy 25101",
+      age: "01/11/2022",
+      engine: "Benzín, 145 kW, automat, 2,0 L",
+      mileage: "112 776 km",
+      contact: "+420 724 905 839",
+      photo: ""
     }
   ];
 
