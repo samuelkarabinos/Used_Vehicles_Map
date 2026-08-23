@@ -97,6 +97,7 @@
     border-top: 1px solid #eee;
     padding-top: 8px;
     margin-top: 4px;
+    gap: 8px;
   }
   .popup-contact-label {
     font-size: 12px;
@@ -117,6 +118,15 @@
     background: #f1f1f1;
     padding: 3px 10px;
     border-radius: 20px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  a.popup-contact-value {
+    color: #0a7a3d;
+    background: #e7f7ee;
+  }
+  a.popup-contact-value:active {
+    opacity: 0.7;
   }
 </style>
 </head>
@@ -312,10 +322,26 @@
     popupAnchor: [0, -32]
   });
 
+  // Rozpozná, či je "contact" reálne telefónne číslo (obsahuje aspoň 6 číslic),
+  // alebo iný text (napr. "formulár") - vtedy sa nerobí klikateľný tel: odkaz.
+  function isPhoneNumber(contact) {
+    const digits = contact.replace(/\D/g, '');
+    return digits.length >= 6;
+  }
+
+  // Vyčistí číslo na formát vhodný pre tel: odkaz (ponechá len + a číslice).
+  function toTelHref(contact) {
+    return 'tel:' + contact.replace(/[^\d+]/g, '');
+  }
+
   cars.forEach(car => {
     const photoHtml = car.photo
       ? `<img class="popup-photo" src="${car.photo}" alt="${car.title}">`
       : '';
+
+    const contactHtml = isPhoneNumber(car.contact)
+      ? `<a class="popup-contact-value" href="${toTelHref(car.contact)}">${car.contact}</a>`
+      : `<span class="popup-contact-value">${car.contact}</span>`;
 
     const popupHtml = `
       <div class="popup-card">
@@ -340,7 +366,7 @@
           </div>
           <div class="popup-contact">
             <a class="popup-contact-label" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(car.location)}" target="_blank" rel="noopener">${car.location} ↗</a>
-            <span class="popup-contact-value">${car.contact}</span>
+            ${contactHtml}
           </div>
         </div>
       </div>
