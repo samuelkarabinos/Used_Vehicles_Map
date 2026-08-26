@@ -21,6 +21,8 @@ Click the link below to view the arnk of the all cars in table:
 
 [![Cars in Table](https://img.shields.io/badge/Open-Interactive%20Map-blue?style=for-the-badge)](https://samuelkarabinos.github.io/Used_Vehicles_Map/volvo_v60_rebricek.html)
 
+Or visit directly: https://samuelkarabinos.github.io/Used_Vehicles_Map/volvo_v60_rebricek.html
+
 ---
 
 **Author**: Samuel Karabinos
