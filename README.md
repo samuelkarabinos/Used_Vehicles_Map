@@ -15,6 +15,12 @@ Click the link below to view the interactive map:
 
 Or visit directly: https://samuelkarabinos.github.io/Used_Vehicles_Map/interactive_map.html
 
+## Data in Table
+
+Click the link below to view the arnk of the all cars in table:
+
+[![Interactive Vehicles Map](https://img.shields.io/badge/Open-Interactive%20Map-blue?style=for-the-badge)](https://samuelkarabinos.github.io/Used_Vehicles_Map/volvo_v60_rebricek.html)
+
 ---
 
 **Author**: Samuel Karabinos
